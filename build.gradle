@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.7.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.vishalmamidi'
@@ -26,6 +27,43 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+
+// jacoco starts here
+
+jacoco {
+	toolVersion = "0.8.8"
 }
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		html.required = true
+	}
+	afterEvaluate {
+		classDirectories.setFrom(files(classDirectories.files.collect {
+			fileTree(dir: it, exclude: ["**/com/vishalmamidi/springcoverage/router/**"])
+		}))
+	}
+	finalizedBy jacocoTestCoverageVerification
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			enabled true
+
+			excludes = ["**/com/vishalmamidi/springcoverage/router/**"]
+
+			limit {
+				//minimum coverage for build success 0.60 = 60%
+				minimum = 0.57
+			}
+		}
+	}
+}
+
