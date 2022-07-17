@@ -49,6 +49,7 @@ jobs:
         run: ./gradlew build
 
       - name: Deploy 🚀
+        if: always()
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build/reports/jacoco/test/html # The folder the action should deploy.

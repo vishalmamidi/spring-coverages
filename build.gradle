@@ -28,8 +28,7 @@ dependencies {
 }
 
 ext {
-	jococoValidationEnable = true
-
+	jacocoVerification = true
 	jacocoExcludes = [
 			'com/vishalmamidi/springcoverage/abc/**',
 			'com/vishalmamidi/springcoverage/router/**'
@@ -58,8 +57,9 @@ jacocoTestCoverageVerification {
 	}
 
 	violationRules {
+		enabled = jacocoVerification
 		rule {
-			setEnabled(true)
+			enabled = true
 			limit {
 				counter = 'INSTRUCTION'
 				value = 'COVEREDRATIO'
@@ -67,7 +67,7 @@ jacocoTestCoverageVerification {
 			}
 		}
 		rule {
-			setEnabled(false)
+			enabled = false
 			limit {
 				counter = 'INSTRUCTION'
 				value = 'COVEREDRATIO'
