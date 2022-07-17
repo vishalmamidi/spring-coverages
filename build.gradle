@@ -27,43 +27,89 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
+ext {
+	jococoValidationEnable = true
 
-// jacoco starts here
+	jacocoExcludes = [
+			'com/vishalmamidi/springcoverage/abc/**',
+			'com/vishalmamidi/springcoverage/router/**'
+	]
+}
+
+
+test {
+	useJUnitPlatform()
+}
+
+jacocoTestReport {
+	reports {
+		html.required = true
+		xml.required = true
+	}
+	afterEvaluate {
+		excludedClassFilesForReport(classDirectories)
+	}
+}
+
+
+jacocoTestCoverageVerification {
+	afterEvaluate {
+		excludedClassFilesForReport(classDirectories)
+	}
+
+	violationRules {
+		rule {
+			setEnabled(true)
+			limit {
+				counter = 'INSTRUCTION'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+		}
+		rule {
+			setEnabled(false)
+			limit {
+				counter = 'INSTRUCTION'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+			limit {
+				counter = 'BRANCH'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+			limit {
+				counter = 'CLASS'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+			limit {
+				counter = 'METHOD'
+				value = 'COVEREDRATIO'
+				minimum = 0.99
+			}
+		}
+	}
+
+}
+
+private excludedClassFilesForReport(classDirectories) {
+	classDirectories.setFrom(files(classDirectories.files.collect {
+		fileTree(dir: it,
+				exclude: jacocoExcludes
+		)
+	}))
+}
 
 jacoco {
 	toolVersion = "0.8.8"
 }
 
-test {
-	useJUnitPlatform()
-	finalizedBy jacocoTestReport
-}
-
-jacocoTestReport {
-	dependsOn test
-	reports {
-		html.required = true
-	}
-	afterEvaluate {
-		classDirectories.setFrom(files(classDirectories.files.collect {
-			fileTree(dir: it, exclude: ["**/com/vishalmamidi/springcoverage/router/**"])
-		}))
-	}
-	finalizedBy jacocoTestCoverageVerification
-}
-
-jacocoTestCoverageVerification {
-	violationRules {
-		rule {
-			enabled true
-
-			excludes = ["**/com/vishalmamidi/springcoverage/router/**"]
-
-			limit {
-				//minimum coverage for build success 0.60 = 60%
-				minimum = 0.57
-			}
-		}
-	}
-}
-
+check.dependsOn jacocoTestCoverageVerification
+jacocoTestCoverageVerification.dependsOn jacocoTestReport
