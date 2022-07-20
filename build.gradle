@@ -30,8 +30,8 @@ dependencies {
 ext {
 	jacocoVerification = true
 	jacocoExcludes = [
-			'com/vishalmamidi/springcoverage/abc/**',
-			'com/vishalmamidi/springcoverage/router/**'
+			'com/vishalmamidi/**/model/**',
+			'com/vishalmamidi/**/router/**'
 	]
 }
 
