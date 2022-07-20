@@ -7,49 +7,10 @@ on:
   #Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+
 jobs:
-  build-and-publish:
-    concurrency: ci-${{ github.ref }} # Recommended if you intend to make multiple deployments in quick succession.
-    name: build
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-
-      - name: Setup Java 17 (GraalVM)
-        uses: graalvm/setup-graalvm@v1
-        with:
-          version: 'latest'
-          java-version: '17'
-          components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Cache Gradle
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: Make gradlew executable
-        run: chmod +x gradlew
-
-      - name: Build with Gradle
-        env:
-          mongodb_host: localhost
-        run: ./gradlew build
-
-      - name: Deploy 🚀
-        if: always()
-        uses: JamesIves/github-pages-deploy-action@v4
-        with:
-          folder: build/reports/jacoco/test/html # The folder the action should deploy.
+  reusable-workflow:
+    name: "reusable"
+    uses: vishalmamidi/workflows/.github/workflows/build-push-deploy.yaml@main
+    with:
+      deploy: false
