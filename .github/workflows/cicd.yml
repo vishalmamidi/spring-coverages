@@ -11,6 +11,6 @@ on:
 jobs:
   reusable-workflow:
     name: "reusable"
-    uses: vishalmamidi/workflows/.github/workflows/build-push-deploy.yaml@main
+    uses: vishalmamidi/workflows/.github/workflows/build-gradle.yml@main
     with:
       deploy: false
