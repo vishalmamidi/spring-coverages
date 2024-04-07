@@ -15,5 +15,6 @@ jobs:
     permissions:
       contents: read
       checks: write
+      pull-requests: write
     uses: vishalmamidi/workflows/.github/workflows/quick-checks-unit.yml@main
     secrets: inherit
