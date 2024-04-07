@@ -12,7 +12,8 @@ on:
 jobs:
   quick-checks-unit:
     name: 🚨
-    permissions:
-      contents: read
+    # permissions:
+    #   contents: read
+    permissions: write-all
     uses: vishalmamidi/workflows/.github/workflows/quick-checks-unit.yml@main
     secrets: inherit
