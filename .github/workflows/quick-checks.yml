@@ -18,3 +18,10 @@ jobs:
       pull-requests: write
     uses: vishalmamidi/workflows/.github/workflows/quick-checks-unit.yml@main
     secrets: inherit
+
+  quick-checks-gradle:
+    name: 🏗️
+    permissions:
+      contents: read
+    uses: vishalmamidi/workflows/.github/workflows/quick-checks-gradle.yml@main
+    secrets: inherit
